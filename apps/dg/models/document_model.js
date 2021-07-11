@@ -112,28 +112,24 @@ DG.Document.createDocument = function( iProperties) {
     tProperties = iProperties || {};
 
   /* A store must exist to create a document */
-  DG.store = DG.ModelStore.create( {
-    _idCount: SC.none( iProperties.idCount) ? 0 : iProperties.idCount });
-  tDocument =  DG.Document.create(tProperties);
+  DG.store = DG.ModelStore.create( { _idCount: iProperties.idCount || 0 });
+  tDocument = DG.Document.create(tProperties);
 
   DG.activeDocument = tDocument;
 
   if (tProperties.globalValues) {
     tProperties.globalValues.forEach( function (gv) {
-      gv.document = tDocument;
-      DG.GlobalValue.createGlobalValue(gv);
+      DG.GlobalValue.createGlobalValue(Object.assign({}, gv, { document: tDocument }));
     });
   }
   if (tProperties.components) {
     tProperties.components.forEach(function (component) {
-      component.document = tDocument;
-      DG.Component.createComponent(component);
+      DG.Component.createComponent(Object.assign({}, component, { document: tDocument }));
     });
   }
   if (tProperties.contexts) {
     tProperties.contexts.forEach(function (context) {
-      context.document = tDocument;
-      DG.DataContextRecord.createContext(context);
+      DG.DataContextRecord.createContext(Object.assign({}, context, { document: tDocument }));
     });
   }
   DG.log('Create document: ' + [tDocument.name, tDocument.appName].join(', '));

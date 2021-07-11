@@ -378,6 +378,7 @@ DG.main = function main() {
           extension: 'codap',
           readableExtensions: ["json", "", "codap"],
           enableLaraSharing: true,
+          enableInteractiveApiSharing: true,
           log: function(event, eventData) {
             var params = eventData ? JSON.stringify(eventData) : "";
             DG.logUser("%@: %@", event, params);
@@ -396,6 +397,12 @@ DG.main = function main() {
               patchObjectHash: function(obj) {
                 return obj.guid || JSON.stringify(obj);
               },
+              logLaraData: function(obj) {
+                handleLogLaraData(obj);
+              }
+            },
+            {
+              "name": "interactiveApi",
               logLaraData: function(obj) {
                 handleLogLaraData(obj);
               }
